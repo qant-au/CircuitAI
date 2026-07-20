@@ -10,6 +10,12 @@ if (WIN32)  # spring::condition_variable_any requirement
 	set(additionalSources  ${additionalSources} ${CMAKE_SOURCE_DIR}/rts/System/Platform/Win/CriticalSection.cpp)
 elseif (APPLE)
 	set(additionalSources  ${additionalSources} ${CMAKE_SOURCE_DIR}/rts/System/Platform/Mac/Signal.cpp)
+	if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+		# AngelScript's arm64 native calling convention lives in assembly; the
+		# engine's source glob only collects .c/.cpp so it must be added here.
+		enable_language(ASM)
+		set(additionalSources  ${additionalSources} ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/angelscript/source/as_callfunc_arm64_xcode.S)
+	endif ()
 else ()
 	set(additionalSources  ${additionalSources} ${CMAKE_SOURCE_DIR}/rts/System/Platform/Linux/Futex.cpp)
 endif ()
