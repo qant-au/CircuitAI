@@ -13,6 +13,11 @@ elseif (APPLE)
 else ()
 	set(additionalSources  ${additionalSources} ${CMAKE_SOURCE_DIR}/rts/System/Platform/Linux/Futex.cpp)
 endif ()
+if (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+	enable_language(ASM)
+	list(APPEND additionalSources ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/angelscript/source/as_callfunc_arm64_xcode.S)
+endif ()
+
 set(additionalLibraries    ${Cpp_AIWRAPPER_TARGET} CUtils)
 #set(additionalLibraries    ${Cpp_AIWRAPPER_TARGET} CUtils ${SDL2_LIBRARY})
 
